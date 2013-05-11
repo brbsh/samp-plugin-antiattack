@@ -687,6 +687,11 @@ public OnPlayerDisconnect(playerid, reason)
 	playerid &= 65535;
 	aat_playerConnected{playerid} = 0;
 
+	if(reason < 2)
+	{
+		Kick(playerid);
+	}
+
 	if(aat_CALLBACK_DATA & CALLBACK_DATA_OPD) return CallLocalFunction("aat_OnPlayerDisconnect", "ii", playerid, reason);
 
 	return 1;
