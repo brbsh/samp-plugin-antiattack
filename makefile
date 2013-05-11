@@ -1,7 +1,7 @@
 GPP = g++
 GCC = gcc
 
-OUTFILE = "bin/antiattack.so"
+OUTFILE = "antiattack.so"
 
 COMPILE_FLAGS = -c -m32 -O3 -fPIC -w -DLINUX -Wall -I./SDK/amx/
 
