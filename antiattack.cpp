@@ -2,11 +2,6 @@
 
 #include "antiattack.h"
 
-#define CFG_PLUGIN_VERSION	"1.2.1"
-#define CFG_SERVER_IP		"127.0.0.1"
-#define CFG_SERVER_PORT		7777
-#define CFG_SERVER_OWNER	"Windows test user"
-
 
 
 bool aat_logging, aat_clearLog;
@@ -66,135 +61,9 @@ PLUGIN_EXPORT bool PLUGIN_CALL Load(void **ppData)
 	aat_clearLog = false;
 	aat_seekOffset = -96;
 
-	aat_Debug("\n\tЛоггинг действий плагина Anti-Attack запущен...");
-	aat_Debug("Версия плагина: %s", CFG_PLUGIN_VERSION);
-	aat_Debug("Выделение памяти...");
-
-	std::fstream initFile;
-	std::string initData;
-
-	size_t initFind;
-	short isLoaded = 0;
-
-	aat_Debug("Память успешно выделена! Проверка привязки...");
-
-	initFile.open("server.cfg", std::fstream::in);
-
-	while(std::getline(initFile, initData))
-	{
-		if(initData.find('\r') != std::string::npos)
-		{
-			initData.resize((initData.length() - 1));
-		}
-
-		if(initData.find('\n') != std::string::npos)
-		{
-			initData.resize((initData.length() - 1));
-		}
-
-		initFind = initData.find("bind ");
-
-		if(initFind != std::string::npos)
-		{
-			if(isLoaded & 1)
-			{
-				aat_Debug("Ошибка при проверке привязки (Ключ 'bind' в server.cfg дублирован)");
-				aat_Debug("Плагин успешно остановлен!");
-				aat_Debug("\tЛоггинг действий плагина Anti-Attack остановлен...");
-
-				logprintf("   Anti-Attack Error: Initialization failed (Duplicating 'bind' key)");
-
-				initFile.close();
-				initData.clear();
-
-				return 0;
-			}
-
-			initData.erase(0, (initFind + 5));
-
-			if(initData.find(CFG_SERVER_IP))
-			{
-				aat_Debug("Ошибка при проверке привязки (Ключ 'bind' (%s) некорректен)", initData.c_str());
-				aat_Debug("Плагин успешно остановлен!");
-				aat_Debug("\tЛоггинг действий плагина Anti-Attack остановлен...");
-
-				logprintf("   Anti-Attack Error: Initialization failed (Invalid bind IP: %s)", initData.c_str());
-
-				initFile.close();
-				initData.clear();
-
-				return 0;
-			}
-
-			isLoaded |= 1;
-		}
-
-		initFind = initData.find("port ");
-
-		if(initFind != std::string::npos)
-		{
-			if(isLoaded & 2)
-			{
-				aat_Debug("Ошибка при проверке привязки (Ключ 'port' в server.cfg дублирован)");
-				aat_Debug("Плагин успешно остановлен!");
-				aat_Debug("\tЛоггинг действий плагина Anti-Attack остановлен...");
-
-				logprintf("   Anti-Attack Error: Initialization failed (Duplicating 'port' key)");
-
-				initFile.close();
-				initData.clear();
-
-				return 0;
-			}
-
-			initData.erase(0, (initFind + 5));
-
-			if(atoi(initData.c_str()) != CFG_SERVER_PORT)
-			{
-				aat_Debug("Ошибка при проверке привязки (Ключ 'port' (%i) некорректен)", atoi(initData.c_str()));
-				aat_Debug("Плагин успешно остановлен!");
-				aat_Debug("\tЛоггинг действий плагина Anti-Attack остановлен...");
-
-				logprintf("   Anti-Attack Error: Initialization failed (Invalid port: %i)", atoi(initData.c_str()));
-
-				initFile.close();
-				initData.clear();
-
-				return 0;
-			}
-
-			isLoaded |= 2;
-		}
-
-		initFind = initData.find("logtimeformat ");
-
-		if(initFind != std::string::npos)
-		{
-			initData.erase(0, (initFind + 14));
-
-			aat_seekOffset -= (initData.length() + 4);
-		}
-	}
-
-	if(isLoaded != 3)
-	{
-		aat_Debug("Ошибка при проверке привязки (Не указан ключ 'bind', или 'port')");
-		aat_Debug("Плагин успешно остановлен!");
-		aat_Debug("\tЛоггинг действий плагина Anti-Attack остановлен...");
-
-		logprintf("   Anti-Attack Error: Initialization failed (No 'bind' or 'port' value)");
-
-		initFile.close();
-		initData.clear();
-
-		return 0;
-	}
-
-	initFile.close();
-	initData.clear();
-
-	aat_Debug("Привязка установлена на IP: %s:%i (Владелец лицензии: %s)", CFG_SERVER_IP, CFG_SERVER_PORT, CFG_SERVER_OWNER);
-	logprintf("  Plugin licensed to: %s:%i (%s)", CFG_SERVER_IP, CFG_SERVER_PORT, CFG_SERVER_OWNER);
+	aat_Debug("\n\tпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ Anti-Attack пїЅпїЅпїЅпїЅпїЅпїЅпїЅ...");
+	aat_Debug("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %s", CFG_PLUGIN_VERSION);
+	aat_Debug("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ...");
 
 	#ifdef WIN32
 		DWORD dwThreadId = 0;
@@ -210,7 +79,7 @@ PLUGIN_EXPORT bool PLUGIN_CALL Load(void **ppData)
 		mutexHandle = PTHREAD_MUTEX_INITIALIZER;
 	#endif
 
-	aat_Debug("Плагин успешно загрузился!\n");
+	aat_Debug("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!\n");
 	logprintf("  Anti-Attack plugin by BJIADOKC loaded.");
 
 	return 1;
@@ -227,8 +96,8 @@ PLUGIN_EXPORT void PLUGIN_CALL Unload()
 		TerminateThread(threadHandle, (DWORD)0);
 	#endif
 
-	aat_Debug("Плагин успешно остановлен!");
-	aat_Debug("\tЛоггинг действий плагина Anti-Attack остановлен...");
+	aat_Debug("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!");
+	aat_Debug("\tпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ Anti-Attack пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ...");
 
 	logprintf("  Anti-Attack plugin by BJIADOKC unloaded.");
 }
@@ -239,7 +108,7 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 {
 	if(amxQueue.size() > 0) 
 	{
-		aat_Debug("В ProcessTick() есть данные, идет обработка...");
+		aat_Debug("пїЅ ProcessTick() пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ...");
 
 		for(unsigned int i = 0; i < amxQueue.size(); i++)
 		{
@@ -277,7 +146,7 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 			}
 		}
 
-		aat_Debug("Данные в ProcessTick() успешно обработаны");
+		aat_Debug("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ ProcessTick() пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 	}
 }
 
@@ -315,13 +184,13 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 				amxQueue.push(found);
 				unlockMutex();
 
-				aat_Debug("Данные %i:%s отправлены в ProcessTick()", found.attackType, found.data.c_str());
+				aat_Debug("пїЅпїЅпїЅпїЅпїЅпїЅ %i:%s пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ ProcessTick()", found.attackType, found.data.c_str());
 
 				SLEEP(500);
 
 				if(aat_clearLog)
 				{
-					aat_Debug("Лог сервера успешно очищен");
+					aat_Debug("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
 
 					file.close();
 					file.open("server_log.txt", std::fstream::out | std::fstream::trunc);
@@ -341,13 +210,13 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 				amxQueue.push(found);
 				unlockMutex();
 
-				aat_Debug("Данные %i:%s отправлены в ProcessTick()", found.attackType, found.data.c_str());
+				aat_Debug("пїЅпїЅпїЅпїЅпїЅпїЅ %i:%s пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ ProcessTick()", found.attackType, found.data.c_str());
 
 				SLEEP(500);
 
 				if(aat_clearLog)
 				{
-					aat_Debug("Лог сервера успешно очищен");
+					aat_Debug("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
 
 					file.close();
 					file.open("server_log.txt", std::fstream::out | std::fstream::trunc);
@@ -368,13 +237,13 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 				amxQueue.push(found);
 				unlockMutex();
 
-				aat_Debug("Данные %i:%s отправлены в ProcessTick()", found.attackType, found.data.c_str());
+				aat_Debug("пїЅпїЅпїЅпїЅпїЅпїЅ %i:%s пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ ProcessTick()", found.attackType, found.data.c_str());
 
 				SLEEP(500);
 
 				if(aat_clearLog)
 				{
-					aat_Debug("Лог сервера успешно очищен");
+					aat_Debug("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
 
 					file.close();
 					file.open("server_log.txt", std::fstream::out | std::fstream::trunc);
@@ -396,13 +265,13 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 				amxQueue.push(found);
 				unlockMutex();
 
-				aat_Debug("Данные %i:%s отправлены в ProcessTick()", found.attackType, found.data.c_str());
+				aat_Debug("пїЅпїЅпїЅпїЅпїЅпїЅ %i:%s пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ ProcessTick()", found.attackType, found.data.c_str());
 
 				SLEEP(500);
 
 				if(aat_clearLog)
 				{
-					aat_Debug("Лог сервера успешно очищен");
+					aat_Debug("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
 
 					file.close();
 					file.open("server_log.txt", std::fstream::out | std::fstream::trunc);
@@ -422,13 +291,13 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 				amxQueue.push(found);
 				unlockMutex();
 
-				aat_Debug("Данные %i:%s отправлены в ProcessTick()", found.attackType, found.data.c_str());
+				aat_Debug("пїЅпїЅпїЅпїЅпїЅпїЅ %i:%s пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ ProcessTick()", found.attackType, found.data.c_str());
 
 				SLEEP(500);
 
 				if(aat_clearLog)
 				{
-					aat_Debug("Лог сервера успешно очищен");
+					aat_Debug("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
 
 					file.close();
 					file.open("server_log.txt", std::fstream::out | std::fstream::trunc);
@@ -448,13 +317,13 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 				amxQueue.push(found);
 				unlockMutex();
 
-				aat_Debug("Данные %i:%s отправлены в ProcessTick()", found.attackType, found.data.c_str());
+				aat_Debug("пїЅпїЅпїЅпїЅпїЅпїЅ %i:%s пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ ProcessTick()", found.attackType, found.data.c_str());
 
 				SLEEP(500);
 
 				if(aat_clearLog)
 				{
-					aat_Debug("Лог сервера успешно очищен");
+					aat_Debug("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
 
 					file.close();
 					file.open("server_log.txt", std::fstream::out | std::fstream::trunc);
@@ -474,13 +343,13 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 				amxQueue.push(found);
 				unlockMutex();
 
-				aat_Debug("Данные %i:%s отправлены в ProcessTick()", found.attackType, found.data.c_str());
+				aat_Debug("пїЅпїЅпїЅпїЅпїЅпїЅ %i:%s пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ ProcessTick()", found.attackType, found.data.c_str());
 
 				SLEEP(500);
 
 				if(aat_clearLog)
 				{
-					aat_Debug("Лог сервера успешно очищен");
+					aat_Debug("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
 
 					file.close();
 					file.open("server_log.txt", std::fstream::out | std::fstream::trunc);
@@ -502,13 +371,13 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 				amxQueue.push(found);
 				unlockMutex();
 
-				aat_Debug("Данные %i:%s отправлены в ProcessTick()", found.attackType, found.data.c_str());
+				aat_Debug("пїЅпїЅпїЅпїЅпїЅпїЅ %i:%s пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ ProcessTick()", found.attackType, found.data.c_str());
 
 				SLEEP(500);
 
 				if(aat_clearLog)
 				{
-					aat_Debug("Лог сервера успешно очищен");
+					aat_Debug("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
 
 					file.close();
 					file.open("server_log.txt", std::fstream::out | std::fstream::trunc);
@@ -531,7 +400,7 @@ cell AMX_NATIVE_CALL aat_n_NetStats(AMX* amx, cell* params)
 {
 	if(!arguments(1))
 	{
-		aat_Debug("Ошибка при парсинге аргументов в native aat_NetStats");
+		aat_Debug("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ native aat_NetStats");
 		logprintf("Anti-Attack Warning: Number of arguments in function aat_NetStats does not conform to definition");
 
 		return 0;
@@ -569,7 +438,7 @@ cell AMX_NATIVE_CALL aat_n_ClearLog(AMX* amx, cell* params)
 {
 	if(!arguments(1))
 	{
-		aat_Debug("Ошибка при парсинге аргументов в native aat_ClearLog");
+		aat_Debug("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ native aat_ClearLog");
 		logprintf("Anti-Attack Warning: Number of arguments in function aat_ClearLog does not conform to definition");
 
 		return 0;
@@ -579,7 +448,7 @@ cell AMX_NATIVE_CALL aat_n_ClearLog(AMX* amx, cell* params)
 
 	aat_clearLog = (params[1]) ? true : false;
 
-	aat_Debug("Очистка лога при обнаружении атаки %s", aat_clearLog ? ("включена") : ("отключена"));
+	aat_Debug("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ %s", aat_clearLog ? ("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ") : ("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"));
 	logprintf("Anti-Attack: OnAttack log cleaning %s", aat_clearLog ? ("enabled") : ("disabled"));
 
 	return 1;
@@ -591,7 +460,7 @@ cell AMX_NATIVE_CALL aat_n_Logging(AMX* amx, cell* params)
 {
 	if(!arguments(1))
 	{
-		aat_Debug("Ошибка при парсинге аргументов в native aat_Logging");
+		aat_Debug("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ native aat_Logging");
 		logprintf("Anti-Attack Warning: Number of arguments in function aat_Logging does not conform to definition");
 
 		return 0;
@@ -599,7 +468,7 @@ cell AMX_NATIVE_CALL aat_n_Logging(AMX* amx, cell* params)
 
 	if((params[1] && aat_logging) || (!params[1] && !aat_logging)) return 0;
 
-	aat_Debug("\n\tЛоггинг действий плагина Anti-Attack %s...", (params[1]) ? ("запущен") : ("остановлен"));
+	aat_Debug("\n\tпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ Anti-Attack %s...", (params[1]) ? ("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ") : ("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"));
 
 	aat_logging = (params[1]) ? true : false;
 
