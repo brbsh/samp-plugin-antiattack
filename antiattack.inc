@@ -19,7 +19,7 @@
 
 #define _aat_included
 
-#define SAMP_CURRENT_VERSION 		"0.3e"
+#define SAMP_CURRENT_VERSION 		"0.3x"
 #define MAX_PACKETS_PER_SECOND		50000
 #define MAX_FUNCTION_CALL_MS		150
 #define MAX_FUNCTION_CALL_WARNS		5
@@ -585,7 +585,7 @@ public PlayerNetStatsCheck()
 			SetPVarInt(i, "invalid_ping_w", (GetPVarInt(i, "invalid_ping_w") + 1));
 		}
 
-		if(sCounter == 5)
+		if(!sCounter)
 		{
 			DeletePVar(i, "OPRC_flood_w");
 			DeletePVar(i, "OPRS_flood_w");
