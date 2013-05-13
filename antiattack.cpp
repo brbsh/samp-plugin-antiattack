@@ -61,10 +61,10 @@ PLUGIN_EXPORT bool PLUGIN_CALL Load(void **ppData)
 	aat_clearLog = false;
 	aat_seekOffset = -96;
 
-	aat_Debug("\n\t������� �������� ������� Anti-Attack �������...");
-	aat_Debug("������ �������: %s", CFG_PLUGIN_VERSION);
-	aat_Debug("��������� ������...");
-
+	aat_Debug("\n\tAnti-Attack logging enabled...");
+	aat_Debug("Plugin version: %s", CFG_PLUGIN_VERSION);
+	aat_Debug("Starting separated thread...");
+	
 	#ifdef WIN32
 		DWORD dwThreadId = 0;
 		threadHandle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)AttackCheckThread, NULL, 0, &dwThreadId);
@@ -79,7 +79,7 @@ PLUGIN_EXPORT bool PLUGIN_CALL Load(void **ppData)
 		mutexHandle = PTHREAD_MUTEX_INITIALIZER;
 	#endif
 
-	aat_Debug("������ ������� ����������!\n");
+	aat_Debug("Thread started!");
 	logprintf("  Anti-Attack plugin by BJIADOKC loaded.");
 
 	return 1;
@@ -96,9 +96,8 @@ PLUGIN_EXPORT void PLUGIN_CALL Unload()
 		TerminateThread(threadHandle, (DWORD)0);
 	#endif
 
-	aat_Debug("������ ������� ����������!");
-	aat_Debug("\t������� �������� ������� Anti-Attack ����������...");
-
+	aat_Debug("Plugin has been terminated by gamemode!");
+	aat_Debug("\tAnti-Attack logging disabled...");
 	logprintf("  Anti-Attack plugin by BJIADOKC unloaded.");
 }
 
@@ -108,7 +107,7 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 {
 	if(amxQueue.size() > 0) 
 	{
-		aat_Debug("� ProcessTick() ���� ������, ���� ���������...");
+		aat_Debug("* ProcessTick() is not empty, executing...");
 
 		for(unsigned int i = 0; i < amxQueue.size(); i++)
 		{
@@ -146,7 +145,7 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 			}
 		}
 
-		aat_Debug("������ � ProcessTick() ������� ����������");
+		aat_Debug("* All data from ProcessTick() was executed");
 	}
 }
 
@@ -184,13 +183,13 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 				amxQueue.push(found);
 				unlockMutex();
 
-				aat_Debug("������ %i:%s ���������� � ProcessTick()", found.attackType, found.data.c_str());
+				aat_Debug("* Pushing %i:%s to ProcessTick()", found.attackType, found.data.c_str());
 
 				SLEEP(500);
 
 				if(aat_clearLog)
 				{
-					aat_Debug("��� ������� ������� ������");
+					aat_Debug("Server log file cleaning...");
 
 					file.close();
 					file.open("server_log.txt", std::fstream::out | std::fstream::trunc);
@@ -210,13 +209,13 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 				amxQueue.push(found);
 				unlockMutex();
 
-				aat_Debug("������ %i:%s ���������� � ProcessTick()", found.attackType, found.data.c_str());
+				aat_Debug("* Pushing %i:%s to ProcessTick()", found.attackType, found.data.c_str());
 
 				SLEEP(500);
 
 				if(aat_clearLog)
 				{
-					aat_Debug("��� ������� ������� ������");
+					aat_Debug("Server log file cleaning...");
 
 					file.close();
 					file.open("server_log.txt", std::fstream::out | std::fstream::trunc);
@@ -237,13 +236,13 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 				amxQueue.push(found);
 				unlockMutex();
 
-				aat_Debug("������ %i:%s ���������� � ProcessTick()", found.attackType, found.data.c_str());
+				aat_Debug("* Pushing %i:%s to ProcessTick()", found.attackType, found.data.c_str());
 
 				SLEEP(500);
 
 				if(aat_clearLog)
 				{
-					aat_Debug("��� ������� ������� ������");
+					aat_Debug("Server log file cleaning...");
 
 					file.close();
 					file.open("server_log.txt", std::fstream::out | std::fstream::trunc);
@@ -265,13 +264,13 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 				amxQueue.push(found);
 				unlockMutex();
 
-				aat_Debug("������ %i:%s ���������� � ProcessTick()", found.attackType, found.data.c_str());
+				aat_Debug("* Pushing %i:%s to ProcessTick()", found.attackType, found.data.c_str());
 
 				SLEEP(500);
 
 				if(aat_clearLog)
 				{
-					aat_Debug("��� ������� ������� ������");
+					aat_Debug("Server log file cleaning...");
 
 					file.close();
 					file.open("server_log.txt", std::fstream::out | std::fstream::trunc);
@@ -291,13 +290,13 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 				amxQueue.push(found);
 				unlockMutex();
 
-				aat_Debug("������ %i:%s ���������� � ProcessTick()", found.attackType, found.data.c_str());
+				aat_Debug("* Pushing %i:%s to ProcessTick()", found.attackType, found.data.c_str());
 
 				SLEEP(500);
 
 				if(aat_clearLog)
 				{
-					aat_Debug("��� ������� ������� ������");
+					aat_Debug("Server log file cleaning...");
 
 					file.close();
 					file.open("server_log.txt", std::fstream::out | std::fstream::trunc);
@@ -317,13 +316,13 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 				amxQueue.push(found);
 				unlockMutex();
 
-				aat_Debug("������ %i:%s ���������� � ProcessTick()", found.attackType, found.data.c_str());
+				aat_Debug("* Pushing %i:%s to ProcessTick()", found.attackType, found.data.c_str());
 
 				SLEEP(500);
 
 				if(aat_clearLog)
 				{
-					aat_Debug("��� ������� ������� ������");
+					aat_Debug("Server log file cleaning...");
 
 					file.close();
 					file.open("server_log.txt", std::fstream::out | std::fstream::trunc);
@@ -343,13 +342,13 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 				amxQueue.push(found);
 				unlockMutex();
 
-				aat_Debug("������ %i:%s ���������� � ProcessTick()", found.attackType, found.data.c_str());
+				aat_Debug("* Pushing %i:%s to ProcessTick()", found.attackType, found.data.c_str());
 
 				SLEEP(500);
 
 				if(aat_clearLog)
 				{
-					aat_Debug("��� ������� ������� ������");
+					aat_Debug("Server log file cleaning...");
 
 					file.close();
 					file.open("server_log.txt", std::fstream::out | std::fstream::trunc);
@@ -371,13 +370,13 @@ PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 				amxQueue.push(found);
 				unlockMutex();
 
-				aat_Debug("������ %i:%s ���������� � ProcessTick()", found.attackType, found.data.c_str());
+				aat_Debug("* Pushing %i:%s to ProcessTick()", found.attackType, found.data.c_str());
 
 				SLEEP(500);
 
 				if(aat_clearLog)
 				{
-					aat_Debug("��� ������� ������� ������");
+					aat_Debug("Server log file cleaning...");
 
 					file.close();
 					file.open("server_log.txt", std::fstream::out | std::fstream::trunc);
@@ -400,23 +399,23 @@ cell AMX_NATIVE_CALL aat_n_NetStats(AMX* amx, cell* params)
 {
 	if(!arguments(1))
 	{
-		aat_Debug("������ ��� �������� ���������� � native aat_NetStats");
+		aat_Debug("Number of arguments in function aat_NetStats does not conform to definition");
 		logprintf("Anti-Attack Warning: Number of arguments in function aat_NetStats does not conform to definition");
 
 		return 0;
 	}
 
-    int len = NULL;
-    cell *addr  = NULL;
+    	int len = NULL;
+    	cell *addr  = NULL;
 
-    amx_GetAddr(amx, params[1], &addr); 
-    amx_StrLen(addr, &len);
+    	amx_GetAddr(amx, params[1], &addr); 
+    	amx_StrLen(addr, &len);
 
-    if(len++)
-    {
-        char *text = new char[len];
+    	if(len++)
+    	{
+        	char *text = new char[len];
 
-        amx_GetString(text, addr, 0, len);
+       		amx_GetString(text, addr, 0, len);
 		std::string netStats = std::string(text);
 		aat_Debug(" ");
 		aat_Debug(text);
@@ -425,9 +424,11 @@ cell AMX_NATIVE_CALL aat_n_NetStats(AMX* amx, cell* params)
 
 		netStats.erase(0, (netStats.find("Inst. KBits per second: ") + 25));
 		netStats.erase(netStats.find('\n'));
+		
+		float ret = atof(netStats.c_str());
 
-		return (cell)atof(netStats.c_str());
-    }
+		return amx_ftoc(ret);
+    	}
 
 	return 0;
 }
@@ -438,7 +439,7 @@ cell AMX_NATIVE_CALL aat_n_ClearLog(AMX* amx, cell* params)
 {
 	if(!arguments(1))
 	{
-		aat_Debug("������ ��� �������� ���������� � native aat_ClearLog");
+		aat_Debug("Number of arguments in function aat_ClearLog does not conform to definition");
 		logprintf("Anti-Attack Warning: Number of arguments in function aat_ClearLog does not conform to definition");
 
 		return 0;
@@ -448,7 +449,7 @@ cell AMX_NATIVE_CALL aat_n_ClearLog(AMX* amx, cell* params)
 
 	aat_clearLog = (params[1]) ? true : false;
 
-	aat_Debug("������� ���� ��� ����������� ����� %s", aat_clearLog ? ("��������") : ("���������"));
+	aat_Debug("OnAttack log cleaning %s", aat_clearLog ? ("enabled") : ("disabled"));
 	logprintf("Anti-Attack: OnAttack log cleaning %s", aat_clearLog ? ("enabled") : ("disabled"));
 
 	return 1;
@@ -460,7 +461,7 @@ cell AMX_NATIVE_CALL aat_n_Logging(AMX* amx, cell* params)
 {
 	if(!arguments(1))
 	{
-		aat_Debug("������ ��� �������� ���������� � native aat_Logging");
+		aat_Debug("Number of arguments in function aat_Logging does not conform to definition");
 		logprintf("Anti-Attack Warning: Number of arguments in function aat_Logging does not conform to definition");
 
 		return 0;
@@ -468,11 +469,10 @@ cell AMX_NATIVE_CALL aat_n_Logging(AMX* amx, cell* params)
 
 	if((params[1] && aat_logging) || (!params[1] && !aat_logging)) return 0;
 
-	aat_Debug("\n\t������� �������� ������� Anti-Attack %s...", (params[1]) ? ("�������") : ("����������"));
-
 	aat_logging = (params[1]) ? true : false;
-
-	logprintf("Anti-Attack: logging %s from script", aat_logging ? ("enabled") : ("disabled"));
+	
+	aat_Debug("\n\tAnti-Attack logging %s", aat_logging ? ("enabled") : ("disabled"));
+	logprintf("Anti-Attack: logging %s", aat_logging ? ("enabled") : ("disabled"));
 
 	return 1;
 }
