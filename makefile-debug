@@ -9,5 +9,5 @@ all:
 	$(GCC) $(COMPILE_FLAGS) ./sdk/amx/*.c
 	$(GPP) $(COMPILE_FLAGS) ./sdk/*.cpp
 	$(GPP) $(COMPILE_FLAGS) *.cpp
-	$(GPP) -m32 -O0 -fshort-wchar -shared -o $(OUTFILE) *.o -lpthread
+	$(GPP) -O0 -fshort-wchar -shared -o $(OUTFILE) *.o -lpthread
 	rm -f *.o
