@@ -2,6 +2,8 @@
 
 #include "antiattack.h"
 
+#define CFG_PLUGIN_VERSION "1.2.2"
+
 
 
 bool aat_logging, aat_clearLog;
@@ -425,7 +427,7 @@ cell AMX_NATIVE_CALL aat_n_NetStats(AMX* amx, cell* params)
 		netStats.erase(0, (netStats.find("Inst. KBits per second: ") + 25));
 		netStats.erase(netStats.find('\n'));
 		
-		float ret = atof(netStats.c_str());
+		double ret = atof(netStats.c_str());
 
 		return amx_ftoc(ret);
     	}
