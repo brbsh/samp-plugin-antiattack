@@ -3,7 +3,7 @@ GCC = gcc
 
 OUTFILE = "antiattack.so"
 
-COMPILE_FLAGS = -c -m32 -O3 -fPIC -w -DLINUX -Wall -I./SDK/amx/
+COMPILE_FLAGS = -c -m32 -O3 -fPIC -w -DLINUX -Wall -I./sdk/amx/
 
 all:
 	$(GCC) $(COMPILE_FLAGS) ./sdk/amx/*.c
