@@ -213,8 +213,3 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
-
-
-*.zip
-*.rar
-*.tar.gz
