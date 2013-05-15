@@ -2,8 +2,8 @@
 
 #pragma warning (disable:4005 700 996)
 
-#include "SDK/amx/amx.h"
-#include "SDK/plugincommon.h"
+#include "sdk/amx/amx.h"
+#include "sdk/plugincommon.h"
 
 #if (defined(WIN32) || defined(_WIN32) || defined(_WIN64))
 	#include <windows.h>
