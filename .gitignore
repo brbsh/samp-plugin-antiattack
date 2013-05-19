@@ -55,6 +55,7 @@ build/
 
 *_i.c
 *_p.c
+*.exp
 *.ilk
 *.meta
 *.obj
@@ -70,6 +71,7 @@ build/
 *.tmp
 *.tmp_proj
 *.log
+*.lib
 *.vspscc
 *.vssscc
 .builds
