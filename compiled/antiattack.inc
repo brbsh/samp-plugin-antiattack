@@ -27,9 +27,14 @@
 //#define aat_DEBUG
 
 
+
+
+
+native aat_Init(maxplayers, bool:logging = true, bool:clear_log = false);
 native aat_NetStats(stats[]);
-native aat_ClearLog(bool:clear);
-native aat_Logging(bool:enabled);
+
+
+
 
 
 
@@ -40,6 +45,8 @@ enum
 	ATTACK_TYPE_SERVER_FULL,
 	ATTACK_TYPE_INVALID_RCON
 }
+
+
 
 enum
 {
@@ -67,6 +74,8 @@ enum
 	ATTACK_TYPE_NULL_COMMAND,
 	ATTACK_TYPE_INVALID_CLICK_SRC
 }
+
+
 
 enum (<<= 1)
 {
@@ -99,7 +108,9 @@ enum (<<= 1)
 
 
 new aat_playerConnected[MAX_PLAYERS char];
-new aat_netStatsTimer, aat_maxPlayers, aat_CALLBACK_DATA;
+new aat_netStatsTimer;
+new aat_maxPlayers;
+new aat_CALLBACK_DATA;
 
 
 
@@ -119,6 +130,8 @@ forward PlayerNetStatsCheck();
 	{
 		aat_netStatsTimer = SetTimer("PlayerNetStatsCheck", 1000, true);
 		aat_maxPlayers = GetMaxPlayers();
+
+		aat_Init(maxPlayers, true);
 
 		aat_CALLBACK_DATA |= (funcidx("aat_OnPlayerConnect") != -1) ? CALLBACK_DATA_OPC : 0;
 		aat_CALLBACK_DATA |= (funcidx("aat_OnPlayerDisconnect") != -1) ? CALLBACK_DATA_OPD : 0;
@@ -184,6 +197,8 @@ forward PlayerNetStatsCheck();
 	{
 		aat_netStatsTimer = SetTimer("PlayerNetStatsCheck", 1000, true);
 		aat_maxPlayers = GetMaxPlayers();
+
+		aat_Init(maxPlayers, true);
 
 		aat_CALLBACK_DATA |= (funcidx("aat_OnPlayerConnect") != -1) ? CALLBACK_DATA_OPC : 0;
 		aat_CALLBACK_DATA |= (funcidx("aat_OnPlayerDisconnect") != -1) ? CALLBACK_DATA_OPD : 0;
@@ -559,14 +574,13 @@ public PlayerNetStatsCheck()
 	
 	sCounter += (sCounter == 5) ? -5 : 1;
 
-	for(new i, packets, nsdest[512]; i != aat_maxPlayers; i++)
+	for(new i, nsdest[512]; i != aat_maxPlayers; i++)
 	{
 		if(!IsPlayerConnected(i)) continue;
 
 		GetPlayerNetworkStats(i, nsdest, sizeof nsdest);
-		packets = aat_NetStats(nsdest);
 
-		if(packets >= MAX_PACKETS_PER_SECOND)
+		if(aat_NetStats(nsdest) >= MAX_PACKETS_PER_SECOND)
 		{
 			CallLocalFunction("OnIngameAttackAttempt", "ii", ATTACK_TYPE_PING_RESPONSE, i);
 

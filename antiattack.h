@@ -1,9 +1,7 @@
 #pragma once
+#pragma warning (disable:4005 700 996 4244 4018)
 
-#pragma warning (disable:4005 700 996)
 
-#include "sdk/amx/amx.h"
-#include "sdk/plugincommon.h"
 
 #if (defined(WIN32) || defined(_WIN32) || defined(_WIN64))
 	#include <windows.h>
@@ -18,6 +16,7 @@
 #include <queue>
 #include <list>
 #include <string>
+#include <string.h>
 
 #if defined(LINUX) || defined(FREEBSD) || defined(__FreeBSD__) || defined(__OpenBSD__)
 	#include <unistd.h>
@@ -26,26 +25,35 @@
 	#include <algorithm>
 #endif
 
+#include <boost/thread.hpp>
+#include <boost/thread/mutex.hpp>
+
+#define HAVE_STDINT_H
+
+#include "SDK/plugin.h"
+
+#include "natives.h"
+#include "parser.h"
+#include "string.h"
+
+
+
 #define arguments(a) \
 	!(params[0] != (a << 2))
 
-typedef void (*logprintf_t)(char* format, ...);
 
-#ifdef WIN32
-	#define SLEEP(x) { Sleep(x); }
-#else
-	#define SLEEP(x) { usleep(x * 1000); }
-	typedef unsigned long DWORD;
-#endif
 
-std::string stringvprintf(const char *format, va_list args)
+
+typedef void (*logprintf_t)(char *format, ...);
+
+
+
+struct attackData
 {
-	int length = vsnprintf(NULL, 0, format, args);
-	char *chars = new char[++length];
+	int type;
+	std::string data;
+};
 
-	length = vsnprintf(chars, length, format, args);
-	std::string result(chars);
-	delete chars;
 
-	return result;
-}
+
+void aat_Debug(char *text, ...);

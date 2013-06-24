@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "antiattack", "antiattack.vcxproj", "{AEB9299E-8991-4DF9-854C-AB10B1C9BCBE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AEB9299E-8991-4DF9-854C-AB10B1C9BCBE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AEB9299E-8991-4DF9-854C-AB10B1C9BCBE}.Debug|Win32.Build.0 = Debug|Win32
+		{AEB9299E-8991-4DF9-854C-AB10B1C9BCBE}.Release|Win32.ActiveCfg = Release|Win32
+		{AEB9299E-8991-4DF9-854C-AB10B1C9BCBE}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
