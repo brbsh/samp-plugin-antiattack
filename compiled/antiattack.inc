@@ -19,7 +19,7 @@
 
 #define _aat_included
 
-#define SAMP_CURRENT_VERSION 		"0.3x-R1-2"
+#define SAMP_CURRENT_VERSION 		"0.3x"
 #define MAX_PACKETS_PER_SECOND		50000
 #define MAX_FUNCTION_CALL_MS		150
 #define MAX_FUNCTION_CALL_WARNS		5
@@ -649,7 +649,7 @@ public OnPlayerConnect(playerid)
 
 	GetPlayerVersion(playerid, aat_dest, sizeof aat_dest);
 
-	if(strcmp(aat_dest, SAMP_CURRENT_VERSION, false))
+	if(strfind(aat_dest, SAMP_CURRENT_VERSION, false) == -1)
 	{
 		CallLocalFunction("OnIngameAttackAttempt", "ii", ATTACK_TYPE_INVALID_VERSION, playerid);
 
