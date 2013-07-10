@@ -5,8 +5,6 @@
 
 #if (defined(WIN32) || defined(_WIN32) || defined(_WIN64))
 	#include <windows.h>
-#else
-	#include <pthread.h>
 #endif
 
 #include <time.h>
@@ -26,7 +24,6 @@
 #endif
 
 #include <boost/thread.hpp>
-#include <boost/thread/mutex.hpp>
 
 #define HAVE_STDINT_H
 
