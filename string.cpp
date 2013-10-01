@@ -19,7 +19,7 @@ std::string amxString::vprintf(const char *format, va_list args)
 	int length = vsnprintf(NULL, NULL, format, args);
 	char *chars = NULL;
 	
-	chars = (char *)malloc(++length);
+	chars = new char[++length];
 
 	vsnprintf(chars, length, format, args);
 	std::string result(chars);
