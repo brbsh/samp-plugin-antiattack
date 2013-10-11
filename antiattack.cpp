@@ -38,9 +38,9 @@ PLUGIN_EXPORT bool PLUGIN_CALL Load(void **ppData)
 	gParser = new amxParser();
 
 	aat_Debug("\n\tAnti-Attack logging enabled...");
-	aat_Debug("Plugin version: %s", CFG_PLUGIN_VERSION);
+	aat_Debug("Plugin version: %s", PLUGIN_VERSION);
 
-	logprintf("  Anti-Attack plugin by BJIADOKC loaded.");
+	logprintf("  Anti-Attack v%s by BJIADOKC loaded", PLUGIN_VERSION);
 
 	return 1;
 }
@@ -54,7 +54,7 @@ PLUGIN_EXPORT void PLUGIN_CALL Unload()
 	aat_Debug("Plugin has been terminated by gamemode!");
 	aat_Debug("\tAnti-Attack logging disabled...");
 
-	logprintf("  Anti-Attack plugin by BJIADOKC unloaded.");
+	logprintf("  Anti-Attack v%s by BJIADOKC unloaded", PLUGIN_VERSION);
 
 	delete gParser;
 }

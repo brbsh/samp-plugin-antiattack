@@ -36,7 +36,7 @@
 
 
 
-#define CFG_PLUGIN_VERSION "1.2.2-R2"
+#define PLUGIN_VERSION "1.2.2-R2"
 
 #define arguments(a) \
 	!(params[0] != (a << 2))
