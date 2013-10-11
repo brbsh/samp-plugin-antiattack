@@ -10,6 +10,7 @@
 
 amxNatives *gNatives;
 
+
 extern logprintf_t logprintf;
 extern amxParser *gParser;
 

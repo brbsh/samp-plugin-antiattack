@@ -6,22 +6,18 @@
 
 
 
-#define CFG_PLUGIN_VERSION "1.2.2"
 
 
-
-
-
-extern void	*pAMXFunctions;
 logprintf_t logprintf;
-
-extern amxParser *gParser;
-extern amxString *gString;
 
 boost::mutex gMutex;
 
 std::queue<attackData> amxQueue;
 std::list<AMX *> amxList;
+
+extern void	*pAMXFunctions;
+extern amxParser *gParser;
+extern amxString *gString;
 
 
 
@@ -57,7 +53,10 @@ PLUGIN_EXPORT void PLUGIN_CALL Unload()
 
 	aat_Debug("Plugin has been terminated by gamemode!");
 	aat_Debug("\tAnti-Attack logging disabled...");
+
 	logprintf("  Anti-Attack plugin by BJIADOKC unloaded.");
+
+	delete gParser;
 }
 
 
@@ -67,7 +66,6 @@ PLUGIN_EXPORT int PLUGIN_CALL AmxLoad(AMX *amx)
 	amxList.push_back(amx);
 
 	return amx_Register(amx, amxNatives::aatNatives, -1);
-
 }
 
 
@@ -91,50 +89,47 @@ PLUGIN_EXPORT int PLUGIN_CALL AmxUnload(AMX *amx)
 
 PLUGIN_EXPORT void PLUGIN_CALL ProcessTick()
 {
-	if(!amxQueue.empty()) 
+	while(!amxQueue.empty()) 
 	{
 		int amx_idx;
-		cell amxAddress;
 		attackData toamx;
-		std::list<AMX *>::iterator amx;
+
+		std::list<AMX *>::iterator end = amxList.end();
 
 		aat_Debug("* ProcessTick() is not empty, executing...");
 
-		for(unsigned int i = 0; i < amxQueue.size(); i++)
+		boost::mutex::scoped_lock lock(gMutex);
+		toamx = amxQueue.front();
+		amxQueue.pop();
+		lock.unlock();
+
+		for(std::list<AMX *>::iterator amx = amxList.begin(); amx != end; amx++) 
 		{
-			boost::mutex::scoped_lock lock(gMutex);
-			toamx = amxQueue.front();
-			amxQueue.pop();
-			lock.unlock();
-
-			for(amx = amxList.begin(); amx != amxList.end(); amx++) 
+			if(toamx.type > 4)
 			{
-				if(toamx.type > 4)
+				cell amxAddress;
+
+				if(!amx_FindPublic(*amx, "OnRemoteAttackAttempt", &amx_idx)) 
 				{
-					if(!amx_FindPublic(*amx, "OnRemoteAttackAttempt", &amx_idx)) 
-					{
-						amx_PushString(*amx, &amxAddress, NULL, toamx.data.c_str(), NULL, NULL);
-						amx_Push(*amx, (toamx.type - 5));
+					amx_PushString(*amx, &amxAddress, NULL, toamx.data.c_str(), NULL, NULL);
+					amx_Push(*amx, (toamx.type - 5));
 
-						amx_Exec(*amx, NULL, amx_idx);
+					amx_Exec(*amx, NULL, amx_idx);
 
-						amx_Release(*amx, amxAddress);
-					}
+					amx_Release(*amx, amxAddress);
 				}
-				else
+			}
+			else
+			{
+				if(!amx_FindPublic(*amx, "OnIngameAttackAttempt", &amx_idx)) 
 				{
-					if(!amx_FindPublic(*amx, "OnIngameAttackAttempt", &amx_idx)) 
-					{
-						amx_Push(*amx, atoi(toamx.data.c_str()));
-						amx_Push(*amx, toamx.type);
-
-						amx_Exec(*amx, NULL, amx_idx);
-					}
+					amx_Push(*amx, atoi(toamx.data.c_str()));
+					amx_Push(*amx, toamx.type);
+					
+					amx_Exec(*amx, NULL, amx_idx);
 				}
 			}
 		}
-
-		aat_Debug("* All data from ProcessTick() was executed");
 	}
 }
 
@@ -145,16 +140,16 @@ void aat_Debug(char *text, ...)
 	if(gParser->Logging)
 	{
 		va_list args;
+
 		std::fstream logfile;
+		std::string buffer;
 
 		va_start(args, text);
-		std::string buffer = gString->vprintf(text, args);
+		buffer = gString->vprintf(text, args);
 		va_end(args);
 
 		logfile.open("attack_log.txt", (std::fstream::out | std::fstream::app));
-
 		logfile << buffer << std::endl;
-		logfile.flush();
 		logfile.close();
 	}
 }

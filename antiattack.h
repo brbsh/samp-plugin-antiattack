@@ -23,6 +23,7 @@
 	#include <algorithm>
 #endif
 
+#include <boost/bind.hpp>
 #include <boost/thread.hpp>
 
 #define HAVE_STDINT_H
@@ -34,6 +35,8 @@
 #include "string.h"
 
 
+
+#define CFG_PLUGIN_VERSION "1.2.2-R2"
 
 #define arguments(a) \
 	!(params[0] != (a << 2))

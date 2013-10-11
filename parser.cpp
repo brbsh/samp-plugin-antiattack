@@ -10,7 +10,9 @@
 
 amxParser *gParser;
 
+
 extern logprintf_t logprintf;
+
 extern std::queue<attackData> amxQueue;
 
 
@@ -21,7 +23,7 @@ amxParser::amxParser()
 {
 	this->Active = true;
 
-	boost::thread parser(&amxParser::Thread);
+	boost::thread parser(boost::bind(&amxParser::Thread));
 }
 
 
@@ -35,13 +37,12 @@ amxParser::~amxParser()
 
 void amxParser::Thread()
 {
+	int seekOffset = -96;
 	attackData pushme;
 
 	std::size_t find;
 	std::size_t sub;
 	std::fstream file;
-
-	int seekOffset = -96;
 
 	do
 	{
@@ -295,7 +296,7 @@ void amxParser::Thread()
 
 		file.close();
 		
-		boost::this_thread::sleep(boost::posix_time::milliseconds(1));
+		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 	}
 	while(gParser->Active);
 }
